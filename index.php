@@ -16,11 +16,11 @@ class UsersApi
 
         // TODO: differentiate users by user and apply filters
         $settings = array(
-            "users" => isset($_GET['users']) ? $_GET['users'] : true,
-            "limit" => isset($_GET['limit']) ? $_GET['limit'] : false,
-            "offset" => isset($_GET['offset']) ? $_GET['offset'] : false,
-            "name" => isset($_GET['name']) ? $_GET['name'] : false,
-            "email" => isset($_GET['email']) ? $_GET['email'] : false,
+            "users" => isset($_GET['users']) ? $_GET['users'] : '',
+            "limit" => isset($_GET['limit']) ? $_GET['limit'] : '',
+            "offset" => isset($_GET['offset']) ? $_GET['offset'] : '',
+            "name" => isset($_GET['name']) ? $_GET['name'] : '',
+            "email" => isset($_GET['email']) ? $_GET['email'] : '',
         );
 
         $result = $this->getContent('csv', $settings);
@@ -28,18 +28,17 @@ class UsersApi
         echo json_encode($result, JSON_PRETTY_PRINT);
     }
 
-
     private function getContent($type, $settings)
     {
 
         switch ($type) {
             case 'csv':
                 $csvReader = new CsvReader((__DIR__) . '/sources/testtakers.csv', $settings);
-                return $csvReader->getContent($settings);
+                return $csvReader->getContent();
                 break;
             case 'json':
                 $jsonReader = new JsonReader((__DIR__) . '/sources/testtakers.json', $settings);
-                return $jsonReader->getContent($settings);
+                return $jsonReader->getContent();
                 break;
             default:
                 break;
