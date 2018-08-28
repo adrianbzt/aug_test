@@ -5,6 +5,7 @@
 //error_reporting(E_ALL);
 
 include dirname(__FILE__) . "/Readers/CsvReader.php";
+include dirname(__FILE__) . "/Readers/JsonReader.php";
 
 
 class UsersApi
@@ -13,11 +14,13 @@ class UsersApi
     public function run()
     {
 
+        // TODO: differentiate users by user and apply filters
         $settings = array(
             "users" => isset($_GET['users']) ? $_GET['users'] : true,
             "limit" => isset($_GET['limit']) ? $_GET['limit'] : false,
             "offset" => isset($_GET['offset']) ? $_GET['offset'] : false,
             "name" => isset($_GET['name']) ? $_GET['name'] : false,
+            "email" => isset($_GET['email']) ? $_GET['email'] : false,
         );
 
         $result = $this->getContent('csv', $settings);
@@ -32,21 +35,15 @@ class UsersApi
         switch ($type) {
             case 'csv':
                 $csvReader = new CsvReader((__DIR__) . '/sources/testtakers.csv', $settings);
-                return $csvReader->getContentFromCsv($settings);
+                return $csvReader->getContent($settings);
                 break;
             case 'json':
-                return $this->getContentFromJson($settings);
+                $jsonReader = new JsonReader((__DIR__) . '/sources/testtakers.json', $settings);
+                return $jsonReader->getContent($settings);
                 break;
             default:
                 break;
         }
-
-    }
-
-    private function getContentFromJson($settings)
-    {
-
-        $path = (__DIR__) . '/sources/testtakers.json';
 
     }
 

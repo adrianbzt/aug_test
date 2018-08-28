@@ -12,7 +12,7 @@ class CsvReader
         $this->settings = $settings;
     }
 
-    public function getContentFromCsv()
+    public function getContent()
     {
         $fileContent = false;
 
@@ -20,6 +20,7 @@ class CsvReader
 
         $key = 0;
         $header = [];
+
 
         if (file_exists($this->path)) {
             if ($handle) {
@@ -29,34 +30,21 @@ class CsvReader
 
                     if ($key === 0) {
                         $header = $explodedLine;
-
                     } else {
-
 
                         $row = [];
 
+                        //TODO: filter values by settings received
                         foreach ($header as $key => $value) {
                             $row[trim($value)] = trim($explodedLine[$key]);
                         }
-
                         $fileContent[] = $row;
 
-
                     }
-
                     $key++;
-
-
-                    if ($this->settings['users']) {
-
-                    } else {
-
-                    }
                 }
 
                 fclose($handle);
-            } else {
-                // error opening the file.
             }
         }
 
